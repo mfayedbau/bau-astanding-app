@@ -37,13 +37,6 @@ if uploaded_file:
     df['ASTANDING_ENCODED'] = df['ASTANDING'].map(ASTANDINGEN)
     df.dropna(subset=['ASTANDING_ENCODED'], inplace=True)
 
-    df['EARNED_PER_REG'] = df['EARNED'] / df['REG'].replace(0, 1)
-    df['W_FAIL_RATIO'] = (df['W'] + df['F']) / df['REG'].replace(0, 1)
-    df['HAS_WITHDRAWALS'] = (df['W'] > 0).astype(int)
-    df['IS_FAIL'] = (df['F'] > 0).astype(int)
-    df['CGPA_BIN'] = pd.cut(df['CGPA'], bins=[0, 1.5, 2.5, 3.5, 4],
-                          labels=['Low', 'Med-Low', 'Med-High', 'High'])
-    df = pd.get_dummies(df, columns=['CGPA_BIN'], drop_first=True)
 
     X = df.drop(columns=['ASTANDING', 'ASTANDING_ENCODED'])
     y = df['ASTANDING_ENCODED']
@@ -60,13 +53,6 @@ if uploaded_file:
     try:
         new_df = pd.read_excel(uploaded_file, sheet_name="Sheet7")
 
-        new_df['EARNED_PER_REG'] = new_df['EARNED'] / new_df['REG'].replace(0, 1)
-       new_df['W_FAIL_RATIO'] = (new_df['W'] + new_df['F']) / new_df['REG'].replace(0, 1)
-        new_df['HAS_WITHDRAWALS'] = (new_df['W'] > 0).astype(int)
-        new_df['IS_FAIL'] = (new_df['F'] > 0).astype(int)
-        new_df['CGPA_BIN'] = pd.cut(new_df['CGPA'], bins=[0, 1.5, 2.5, 3.5, 4],
-                                   labels=['Low', 'Med-Low', 'Med-High', 'High'])
-        new_df = pd.get_dummies(new_df, columns=['CGPA_BIN'], drop_first=True)
 
         for col in X.columns:
             if col not in new_df.columns:
